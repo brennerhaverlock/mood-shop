@@ -42,3 +42,19 @@ for (let i = 0; i < data.length; ++i) {
   // put new div inside items container
   itemsContainer.appendChild(newDiv);
 }
+const cart = [];
+
+const obj = { name: 'Shoe', price: 9.99, qty: 3 };
+console.log(obj);
+
+function addItem(name, price) {
+  const item = { name: name, price: price, qty: 1 };
+  cart.push(item);
+}
+function showItems() {
+  console.log(console.log(`You have ${cart.length} itmes in your cart`));
+}
+
+addItem('Apple', 99);
+addItem('Orange', 1.29);
+showItems();
