@@ -44,17 +44,45 @@ for (let i = 0; i < data.length; ++i) {
 }
 const cart = [];
 
-const obj = { name: 'Shoe', price: 9.99, qty: 3 };
-console.log(obj);
-
 function addItem(name, price) {
-  const item = { name: name, price: price, qty: 1 };
+  for (let i = 0; i < cart.length; i += 1) {
+    if (cart[i].name === name) {
+      cart[i].qty += 1;
+      return;
+    }
+  }
+  const item = { name, price, qty: 1 };
   cart.push(item);
 }
 function showItems() {
-  console.log(console.log(`You have ${cart.length} itmes in your cart`));
+  let qty = getQty();
+  console.log(`You have ${getQty()} itmes in your cart`);
+
+  for (let i = 0; i < cart.length; i += 1) {
+    console.log(`- ${cart[i].name} ${cart[i].price} x ${cart.qty}`);
+  }
+
+  console.log(`Total in cart: $${getTotal()}`);
 }
 
+// Get Qty
+function getQty() {
+  let qty = 0;
+  for (let i = 0; i < cart.length; i += 1) {
+    qty += cart[i].qty;
+  }
+  return qty;
+}
+
+// Get total
+function getTotal() {
+  let total = 0;
+  for (let i = 0; i < cart.length; i += 1) {
+    total += cart[i].price * cart[i].qty;
+  }
+
+  return total.toFixed(2);
+}
 addItem('Apple', 99);
 addItem('Orange', 1.29);
 showItems();
