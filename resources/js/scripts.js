@@ -1,12 +1,12 @@
 import data from './data.js';
 
-const itemsContainer = document.getElementById('items');
-
 const itemList = document.getElementById('item-list');
-
+const itemsContainer = document.getElementById('items');
 const cartQty = document.getElementById('cart-qty');
-
 const cartTotal = document.getElementById('cart-total');
+const addForm = document.getElementById('add-form');
+const itemName = document.getElementById('item-name');
+const itemPrice = document.getElementById('item-price');
 
 //itemList.innerHTML = '<li> Hello World</li>';
 //console.log(itemList);
@@ -57,8 +57,43 @@ all_items_button.forEach((elt) =>
     showItems();
   })
 );
-console.log(all_items_button);
+//console.log(all_items_button);
 const cart = [];
+
+// handle change events on update input
+itemList.onchange = function (e) {
+  if (e.target && e.target.classList.contains('update')) {
+    const name = e.target.dataset.name;
+    const qty = parseInt(e.target.value);
+    updateCart(name, qty);
+  }
+};
+
+// handle clicks on list
+
+itemList.onclick = function (e) {
+  //console.log('Clicked list');
+
+  if (e.target && e.target.classList.contains('remove')) {
+    const name = e.target.dataset.name;
+    removeItem(name);
+  } else if (e.target && e.target.classList.contains('add-one')) {
+    const name = e.target.dataset.name;
+    addItem(name);
+  } else if (e.target && e.target.classList.contains('remove-one')) {
+    const name = e.target.dataset.name;
+    removeItem(name, 1);
+  }
+};
+
+// handle add form submit
+
+addForm.onsubmit = function (e) {
+  e.preventDefault();
+  const name = itemName.value;
+  const price = itemPrice.value;
+  addItem(name, price);
+};
 
 function addItem(name, price) {
   for (let i = 0; i < cart.length; i += 1) {
@@ -71,7 +106,7 @@ function addItem(name, price) {
   cart.push(item);
 }
 function showItems() {
-  let qty = getQty();
+  //let qty = getQty();
   //console.log(`You have ${getQty()} itmes in your cart`);
   cartQty.innerHTML = `You have ${getQty()} itmes in your cart`;
   let itemStr = '';
@@ -81,7 +116,13 @@ function showItems() {
     //{name: }
     const { name, price, qty } = cart[i];
 
-    itemStr += `<li>${name} $${price} x ${qty} = ${qty * price}</li>`;
+    itemStr += `<li>
+    ${name} $${price} x ${qty} = ${qty * price}
+    <button class= "remove" data-name="${name}">Remove</button>
+    <button class= "add-one" data-name="${name}"> + </button>
+    <button class= "remove-one" data-name="${name}"> - </button>
+    <input class = "update" type = "number" data-name = "${name}"> 
+    </li>`;
   }
   itemList.innerHTML = itemStr;
 
@@ -117,7 +158,21 @@ function removeItem(name, qty = 0) {
       if (cart[i].qty < 1 || qty === 0) {
         cart.splice(i, 1);
       }
+      showItems();
+      return;
+    }
+  }
+}
 
+function updateCart(name, qty) {
+  for (let i = 0; i < cart.length; i += 1) {
+    if (cart[i].name === name) {
+      if (qty < 1) {
+        removeItem(name);
+        return;
+      }
+      cart[i].qty = qty;
+      showItems();
       return;
     }
   }
