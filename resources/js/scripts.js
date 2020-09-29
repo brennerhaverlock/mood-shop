@@ -50,6 +50,14 @@ for (let i = 0; i < data.length; ++i) {
   // put new div inside items container
   itemsContainer.appendChild(newDiv);
 }
+const all_items_button = Array.from(document.querySelectorAll('button'));
+all_items_button.forEach((elt) =>
+  elt.addEventListener('click', () => {
+    addItem(elt.getAttribute('id'), elt.getAttribute('data-price'));
+    showItems();
+  })
+);
+console.log(all_items_button);
 const cart = [];
 
 function addItem(name, price) {
@@ -65,7 +73,7 @@ function addItem(name, price) {
 function showItems() {
   let qty = getQty();
   //console.log(`You have ${getQty()} itmes in your cart`);
-  cartQty.innerHTML = `You have ${qty()} itmes in your cart`;
+  cartQty.innerHTML = `You have ${getQty()} itmes in your cart`;
   let itemStr = '';
   for (let i = 0; i < cart.length; i += 1) {
     //console.log(`- ${cart[i].name} ${cart[i].price} x ${cart.qty}`);
